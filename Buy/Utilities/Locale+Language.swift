@@ -1,5 +1,5 @@
 //
-//  Header.swift
+//  Locale+Language.swift
 //  Buy
 //
 //  Created by Shopify.
@@ -26,13 +26,18 @@
 
 import Foundation
 
-internal struct Header {
-    static var userAgent     = "User-Agent"
-    static var accept        = "Accept"
-    static var contentType   = "Content-Type"
-    static var authorization = "X-Shopify-Storefront-Access-Token"
-    static var sdkVersion    = "X-SDK-Version"
-    static var sdkVariant    = "X-SDK-Variant"
-    static var queryTag      = "X-Query-Tag"
-    static var language     = "Accept-Language"
+internal extension Locale {
+    
+    var languageIdentifier: String {
+        let components = [
+            languageCode,
+            regionCode,
+        ].compactMap { $0 }
+        
+        if !components.isEmpty {
+            return components.joined(separator: "-")
+        } else {
+            return identifier
+        }
+    }
 }
