@@ -8,10 +8,23 @@ require 'graphql_schema'
 require 'graphql_swift_gen'
 
 shared_storefront_api_key = "4a6c829ec3cb12ef9004bf8ed27adf12"
-storefront_api_version    = "2020-01"
-endpoint                  = URI("https://app.shopify.com/services/graphql/introspection/storefront?api_client_api_key=#{shared_storefront_api_key}&api_version=#{storefront_api_version}")
-body                      = Net::HTTP.get(endpoint)
-schema                    = GraphQLSchema.new(JSON.parse(body))
+storefront_api_version = ARGV[0]
+
+puts "#{storefront_api_version}"
+
+endpoint = URI("https://app.shopify.com/services/graphql/introspection/storefront?api_client_api_key=#{shared_storefront_api_key}&api_version=#{storefront_api_version}")
+
+res = Net::HTTP.get_response(endpoint)
+if res.is_a?(Net::HTTPSuccess)
+  puts res.body
+  File.open("version", "w") { |f|
+  	f.write "#{storefront_api_version}"
+  }
+  schema = GraphQLSchema.new(JSON.parse(res.body))
+else
+  puts "You have provided an invalid API version. Please try again."
+	exit(false)
+end
 
 customScalars = [
 	GraphQLSwiftGen::Scalar.new(
