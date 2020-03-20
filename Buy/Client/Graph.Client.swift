@@ -95,7 +95,8 @@ extension Graph {
         public init(shopDomain: String, api: API = .storefront, version: String = "2019-10", apiKey: String, session: URLSession = URLSession(configuration: URLSessionConfiguration.default)) {
 
             let shopURL  = Client.urlFor(shopDomain)
-            self.apiURL  = Client.urlFor(shopDomain, path: api.path(version))
+            //self.apiURL  = Client.urlFor(shopDomain, path: api.path(version))
+            self.apiURL  = Client.urlFor(shopDomain, path: "/api/2019-10/graphql")
             self.cache   = Cache(shopName: shopDomain)
             self.session = session
             
