@@ -69,6 +69,18 @@ extension Graph {
 
         internal let apiURL:  URL
         internal let headers: [String : String]
+        
+        public enum API {
+            case admin
+            case storefront
+            
+            func path(_ version: String) -> String {
+                switch self {
+                case .admin:      return "/admin/api/\(version)/graphql"
+                case .storefront: return "/api/\(version)/graphql"
+                }
+            }
+        }
 
         // ----------------------------------
         //  MARK: - Init -
@@ -80,18 +92,29 @@ extension Graph {
         ///     - apiKey:     The API key for you app, obtained from the Shopify admin.
         ///     - session:    A `URLSession` to use for this client. If left blank, a session with a `default` configuration will be created.
         ///
-        public init(shopDomain: String, apiKey: String, session: URLSession = URLSession(configuration: URLSessionConfiguration.default)) {
+        public init(shopDomain: String, api: API = .storefront, version: String = "2019-10", apiKey: String, session: URLSession = URLSession(configuration: URLSessionConfiguration.default)) {
 
             let shopURL  = Client.urlFor(shopDomain)
-            self.apiURL  = Client.urlFor(shopDomain, path: "/admin/api/2019-10/graphql")
+            self.apiURL  = Client.urlFor(shopDomain, path: api.path(version))
             self.cache   = Cache(shopName: shopDomain)
             self.session = session
-            self.headers = [
-                Header.userAgent     : Global.userAgent,
-                Header.authorization : apiKey,
-                Header.sdkVersion    : Global.frameworkVersion,
-                Header.sdkVariant    : "ios",
-            ]
+            
+            switch api {
+            case .admin:
+                self.headers = [
+                    Header.userAgent          : Global.userAgent,
+                    Header.adminAuthorization : apiKey,
+                    Header.sdkVersion         : Global.frameworkVersion,
+                    Header.sdkVariant         : "ios",
+                ]
+            case .storefront:
+                self.headers = [
+                    Header.userAgent     : Global.userAgent,
+                    Header.authorization : apiKey,
+                    Header.sdkVersion    : Global.frameworkVersion,
+                    Header.sdkVariant    : "ios",
+                ]
+            }
 
             precondition(!apiKey.isEmpty, "API Key is required to the Buy SDK. You can obtain one by adding a Mobile App channel here: \(shopURL.appendingPathComponent("admin"))")
         }

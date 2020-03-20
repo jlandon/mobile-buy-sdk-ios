@@ -27,11 +27,12 @@
 import Foundation
 
 internal struct Header {
-    static var userAgent     = "User-Agent"
-    static var accept        = "Accept"
-    static var contentType   = "Content-Type"
-    static var authorization = "X-Shopify-Storefront-Access-Token"
-    static var sdkVersion    = "X-SDK-Version"
-    static var sdkVariant    = "X-SDK-Variant"
-    static var queryTag      = "X-Query-Tag"
+    static var userAgent          = "User-Agent"
+    static var accept             = "Accept"
+    static var contentType        = "Content-Type"
+    static var authorization      = "X-Shopify-Storefront-Access-Token"
+    static var adminAuthorization = "X-Shopify-Access-Token"
+    static var sdkVersion         = "X-SDK-Version"
+    static var sdkVariant         = "X-SDK-Variant"
+    static var queryTag           = "X-Query-Tag"
 }
