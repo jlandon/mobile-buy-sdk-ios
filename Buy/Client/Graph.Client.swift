@@ -76,8 +76,8 @@ extension Graph {
             
             func path(_ version: String) -> String {
                 switch self {
-                case .admin:      return "/admin/api/\(version)/graphql"
-                case .storefront: return "/api/\(version)/graphql"
+                case .admin:      return "/admin/api/\(version)/graphql.json"
+                case .storefront: return "/api/\(version)/graphql.json"
                 }
             }
         }
